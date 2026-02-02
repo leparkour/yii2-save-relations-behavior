@@ -34,7 +34,7 @@ php composer.phar require --prefer-dist la-haute-societe/yii2-save-relations-beh
 or add
 
 ```
-"la-haute-societe/yii2-save-relations-behavior": "*"
+"leparkour/yii2-save-relations-behavior": "*"
 ```
 
 to the require section of your `composer.json` file.
