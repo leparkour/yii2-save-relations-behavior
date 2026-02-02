@@ -290,9 +290,24 @@ class SaveRelationsBehavior extends Behavior
         if (($relationModel instanceof BaseActiveRecord) && is_array($data)) {
             $relationModel->setAttributes($data);
             if ($relationModel->hasMethod('loadRelations')) {
-                $relationModel->loadRelations($data);
-            }
+				$relationsToLoad = [];
+				foreach (array_keys($data) as $name) {
+					$getter = 'get' . str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $name)));
 
+					if (!method_exists($relationModel, $getter)) {
+						continue;
+					}
+                    
+					try {
+						$relationModel->getRelation($name);
+						$relationsToLoad[] = $name;
+					} catch (\Throwable $e) {}
+				}
+
+				if (!empty($relationsToLoad)) {
+					$relationModel->loadRelations($relationsToLoad);
+				}
+            }
         }
         return $relationModel;
     }
